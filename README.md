@@ -12,7 +12,7 @@ A full-stack decentralized web application (dApp) to securely store and audit me
 | 📦 Backend      | PHP, MySQL, XAMPP                                 |
 | 🔗 Blockchain   | Solidity, Hardhat, MetaMask, Ethers.js            |
 | 🗂️ Logging      | Custom logging table with geolocation and Tx hash |
-| 🧪 Tools         | VS Code, Hardhat Node, Blackbox AI, Canva         |
+| 🧪 Tools         | VS Code, Hardhat Node, Canva         |
 
 ---
 
