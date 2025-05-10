@@ -1,4 +1,4 @@
-# 🏥 Blockchain-Integrated Medical Records System
+# 🏥 Blockchain-Integrated Medical Records System (ArogyaChain)
 
 A full-stack decentralized web application (dApp) to securely store and audit medical records using **Ethereum blockchain**, **PHP backend**, and a **MySQL database**. Every record insertion is immutably logged on the blockchain and silently tracked in the backend with metadata like IP address, timestamp, and hospital.
 
@@ -85,15 +85,6 @@ Then:
 
 ---
 
-## 🌐 Demo Flow
-
-- Login as Hospital or Patient (simulated Aadhar login)
-- Add Record – fills form → sends tx via MetaMask → inserts to DB
-- Silent Logging – logs metadata to record_addition_log
-- Admin Panel – search logs by Aadhar/name/date/etc.
-
----
-
 ## 🔐 Security Approach
 
 - ✅ Blockchain ensures tamper-proof record history
@@ -103,40 +94,19 @@ Then:
 
 ---
 
-## 🧠 Smart Contract Example
-
-```solidity
-function addRecord(
-    string memory _patientAadhar,
-    string memory _treatment,
-    string memory _doctorName
-) public {
-    bytes32 key = _getPatientKey(_patientAadhar);
-    records[key].push(Record({
-        treatment: _treatment,
-        doctorName: _doctorName,
-        date: block.timestamp
-    }));
-}
-```
-
----
-
 ## 📸 Screenshots
 
-Upload screenshots of:
+### MetaMask transaction confirmation
+![MetaMask transaction confirmation](https://github.com/user-attachments/assets/8b7d2f44-0303-4980-91ec-30254d0619bb)
 
-- MetaMask transaction confirmation
-  ![4](https://github.com/user-attachments/assets/8b7d2f44-0303-4980-91ec-30254d0619bb)
+### Login Page
+![Login Page](https://github.com/user-attachments/assets/2e0fd2b3-c1e6-41ec-aed5-db66d634b1d4)
 
-- Login Page
-  ![1](https://github.com/user-attachments/assets/2e0fd2b3-c1e6-41ec-aed5-db66d634b1d4)
+### Patient Dashboard
+![Patient Dashboard](https://github.com/user-attachments/assets/ce4b19e2-506a-47ee-8756-5a97febf8e40)
 
-- Patient Dashboard
-  ![3](https://github.com/user-attachments/assets/431f3718-8549-4a3e-b389-86c08c037c1c)
-
-- Hospital Dashboard
-  ![3](https://github.com/user-attachments/assets/5603227b-f15f-4365-925a-859bf5fe9a9d)
+### Hospital Dashboard
+![Hospital Dashboard](https://github.com/user-attachments/assets/5603227b-f15f-4365-925a-859bf5fe9a9d)
 
 ---
 
