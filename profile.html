@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patient Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary: #1abc9c;
+            --primary-dark: #16a085;
+            --primary-light: rgba(26, 188, 156, 0.1);
+            --secondary: #3498db;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --text-dark: #2c3e50;
+            --text-light: #ecf0f1;
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark), #4ca1af);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            padding: 15px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        header button {
+            background: var(--danger);
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-sm);
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        header button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 2rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar i {
+            font-size: 3rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            padding: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .avatar-upload input {
+            display: none;
+        }
+
+        .profile-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .profile-name {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .profile-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .tab.active {
+            color: white;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab:hover:not(.active) {
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+            color: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Emergency Card */
+        .emergency-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--danger);
+        }
+
+        .emergency-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .emergency-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-info {
+                text-align: center;
+            }
+
+            .profile-meta {
+                justify-content: center;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .animate__animated {
+            animation-duration: 0.5s;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="animate_animated animate_fadeInDown">
+        <h2>Patient Profile</h2>
+        <button id="logoutBtn">Logout</button>
+    </header>
+
+    <div class="container animate_animated animate_fadeIn">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+                <div class="avatar-upload">
+                    <input type="file" id="avatarInput" accept="image/*">
+                    <label for="avatarInput">Change Photo</label>
+                </div>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name">$username</h1>
+                <div class="profile-meta">
+                    <div class="profile-meta-item">
+                        <i class="fas fa-id-card"></i>
+                        <span>ID: PT-10025</span>
+                    </div>
+                    <div class="profile-meta-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Member since: Jan 2022</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="personal">Personal Info</div>
+            <div class="tab" data-tab="medical">Medical Info</div>
+            <div class="tab" data-tab="security">Security</div>
+            <div class="tab" data-tab="emergency">Emergency</div>
+        </div>
+
+        <!-- Personal Info Tab -->
+        <div id="personalTab" class="tab-content active">
+            <form>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" value="">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="zip">ZIP Code</label>
+                        <input type="text" id="zip" value="">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Medical Info Tab -->
+        <div id="medicalTab" class="tab-content">
+            <form>
+                <div class="form-group">
+                    <label for="bloodType">Blood Type</label>
+                    <select id="bloodType">
+                        <option value="" selected>Select Blood Type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="allergies">Allergies</label>
+                    <textarea id="allergies" rows="3" placeholder="List any allergies"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="conditions">Medical Conditions</label>
+                    <textarea id="conditions" rows="3" placeholder="List any chronic conditions"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="medications">Current Medications</label>
+                    <textarea id="medications" rows="3" placeholder="List current medications"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Medical Info
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Security Tab -->
+        <div id="securityTab" class="tab-content">
+            <form>
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-key"></i> Change Password
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Emergency Tab -->
+        <div id="emergencyTab" class="tab-content">
+            <div class="emergency-card">
+                <div class="emergency-header">
+                    <h3 class="emergency-title">Emergency Contacts</h3>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-plus"></i> Add Contact
+                    </button>
+                </div>
+                <form>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="emergencyName1">Name</label>
+                            <input type="text" id="emergencyName1" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyRelation1">Relationship</label>
+                            <input type="text" id="emergencyRelation1" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyPhone1">Phone</label>
+                            <input type="tel" id="emergencyPhone1" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyEmail1">Email</label>
+                            <input type="email" id="emergencyEmail1" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Emergency Contacts
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="emergency-card">
+                <div class="emergency-header">
+                    <h3 class="emergency-title">Emergency QR Code</h3>
+                </div>
+                <div style="text-align: center; padding: 1rem;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Name%3A%20John%20Doe%0ABlood%20Type%3A%20A-%0AEmergency%20Contact%3A%20Jane%20Doe%20(Spouse)%20-%20%2B1%20(555)%20987-6543%0AAllergies%3A%20Penicillin%2C%20Peanuts%0AConditions%3A%20Hypertension%2C%20Type%202%20Diabetes" 
+                         alt="Emergency QR Code" 
+                         style="width: 200px; height: 200px; background: white; padding: 1rem; border-radius: var(--border-radius);">
+                    <p style="margin-top: 1rem; color: rgba(255,255,255,0.8);">
+                        Scan this QR code in emergencies to access critical health information.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("logoutBtn").addEventListener("click", function () {
+            localStorage.clear();
+            window.location.href = "login.html";
+        });
+
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab') + 'Tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Avatar upload preview
+        document.getElementById('avatarInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const avatar = document.querySelector('.profile-avatar');
+                    avatar.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    avatar.appendChild(img);
+                    avatar.appendChild(document.querySelector('.avatar-upload'));
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Show success
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Saved';
+                    
+                    // Reset button after delay
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 1500);
+                }, 1000);
+            });
+        });
+
+        // Set profile name from logged-in user info in localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileNameElement = document.querySelector('.profile-name');
+            const loggedInName = localStorage.getItem('loginName');
+            if (loggedInName && profileNameElement) {
+                profileNameElement.textContent = loggedInName;
+            }
+        });
+    </script>
+</body>
+</html>

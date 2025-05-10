@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Patient Records</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00b894;
+            --primary-dark: #00a884;
+            --primary-light: #e8f8f5;
+            --danger: #e74c3c;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --text-dark: #2d3436;
+            --text-light: #ffffff;
+            --border-radius: 8px;
+            --border-radius-sm: 4px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        #logoutBtn {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        #logoutBtn:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 2rem;
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 2.5rem;
+        }
+
+        h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 184, 148, 0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--primary-light);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 184, 148, 0.1);
+        }
+
+        .request-report-btn {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .request-report-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Modal */
+        #addRecordModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        #closeAddRecordModal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Form Grid Layout */
+        #addRecordForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        #addRecordForm .form-group:nth-child(1),
+        #addRecordForm .form-group:nth-child(2) {
+            grid-column: span 1;
+        }
+
+        #addRecordForm .form-group:nth-child(3),
+        #addRecordForm .form-group:nth-child(4),
+        #addRecordForm .form-group:nth-child(5),
+        #addRecordForm .form-group:nth-child(6),
+        #addRecordForm .form-group:nth-child(7) {
+            grid-column: span 2;
+        }
+
+        #addRecordForm button[type="submit"] {
+            grid-column: span 2;
+        }
+
+        /* Emergency Details Section */
+        .emergency-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .emergency-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .emergency-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .emergency-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .emergency-label {
+            font-size: 0.9rem;
+            color: var(--dark);
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .emergency-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            padding: 0.5rem 0;
+            border-bottom: 2px solid rgba(0, 184, 148, 0.2);
+        }
+
+        .emergency-qr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 184, 148, 0.05);
+            border-radius: var(--border-radius);
+            border: 1px dashed var(--primary);
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-instructions {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--dark);
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            #addRecordForm {
+                grid-template-columns: 1fr;
+            }
+
+            #addRecordForm .form-group {
+                grid-column: span 1 !important;
+            }
+
+            .emergency-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .qr-code {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        /* Animations */
+        .animate__animated {
+            animation-duration: 0.5s;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="animate_animated animate_fadeInDown">
+        <h2>Hospital Patient Records</h2>
+        <button id="logoutBtn">Logout</button>
+    </header>
+
+    <div class="container animate_animated animate_fadeIn">
+        <!-- Search Section -->
+        <section>
+            <h3>Search Patient Records</h3>
+            <form id="searchForm" class="animate_animated animate_fadeInUp">
+                <div class="form-group">
+                    <label for="patientName">Patient Name</label>
+                    <input type="text" id="patientName" name="patientName" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientAadhar">Patient Aadhar Number</label>
+                    <input type="text" id="patientAadhar" name="patientAadhar" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span class="spinner" id="searchSpinner" style="display: none;"></span>
+                    Search Records
+                </button>
+                <div id="searchError" class="error-message"></div>
+            </form>
+        </section>
+
+        <!-- Emergency Details Section -->
+        <section>
+            <h3>Emergency Details</h3>
+            <div class="table-container">
+                <table id="emergencyDetailsTable">
+                    <thead>
+                        <tr>
+                            <th>Blood Group</th>
+                            <th>Emergency Contact Father</th>
+                            <th>Emergency Contact Father Phone</th>
+                            <th>Emergency Contact Mother</th>
+                            <th>Emergency Contact Mother Phone</th>
+                            <th>Chronic Conditions</th>
+                            <th>Allergies</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emergencyDetailsBody">
+                        <tr>
+                            <td colspan="7" style="text-align:center;">No emergency details found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Records Table -->
+        <section>
+            <h3>Medical Records</h3>
+            <div class="table-container">
+                <table id="recordsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Treatment</th>
+                            <th>Medication</th>
+                            <th>Doctor</th>
+                            <th>Notes</th>
+                            <th>Hospital</th>
+                            <th>Request Report</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recordsBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center;">No records found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="showAddRecordBtn" class="btn btn-primary" style="margin-top: 1.5rem;">
+                <i class="fas fa-plus"></i> Add Medical Record
+            </button>
+        </section>
+
+        <!-- Add Record Modal -->
+        <div id="addRecordModal">
+            <div class="modal-content">
+                <button id="closeAddRecordModal">&times;</button>
+                <h3>Add Medical Record</h3>
+                <form id="addRecordForm">
+                    <div class="form-group">
+                        <label for="addDate">Date</label>
+                        <input type="date" id="addDate" name="addDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addTime">Time</label>
+                        <input type="time" id="addTime" name="addTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addTreatment">Treatment</label>
+                        <input type="text" id="addTreatment" name="addTreatment" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addMedication">Medication</label>
+                        <input type="text" id="addMedication" name="addMedication">
+                    </div>
+                    <div class="form-group">
+                        <label for="addDoctorName">Doctor Name</label>
+                        <select id="addDoctorName" name="addDoctorName" required>
+                            <option value="">Select Doctor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addHospitalName">Hospital Name</label>
+                        <select id="addHospitalName" name="addHospitalName" required>
+                            <option value="">Select Hospital</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addNote">Note</label>
+                        <textarea id="addNote" name="addNote" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner" id="addSpinner" style="display: none;"></span>
+                        Add Record
+                    </button>
+                    <div id="addError" class="error-message"></div>
+                    <div id="addSuccess"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript remains exactly the same as in your original code -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // ALL ORIGINAL JAVASCRIPT HERE
+        document.getElementById("logoutBtn").addEventListener("click", function () {
+            localStorage.clear();
+            window.location.href = "login.html";
+        });
+
+        document.getElementById("searchForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const patientName = document.getElementById("patientName").value.trim();
+            const patientAadhar = document.getElementById("patientAadhar").value.trim();
+            const searchError = document.getElementById("searchError");
+            const searchSpinner = document.getElementById("searchSpinner");
+            
+            searchError.textContent = "";
+            searchSpinner.style.display = "inline-block";
+            
+            if (!patientName || !patientAadhar) {
+                searchError.textContent = "Please enter both patient name and Aadhar number.";
+                searchSpinner.style.display = "none";
+                return;
+            }
+
+            // Fetch medical records
+            fetch(`php/get_medical_records.php?patientName=${encodeURIComponent(patientName)}&patientAadhar=${encodeURIComponent(patientAadhar)}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchSpinner.style.display = "none";
+                    const tbody = document.getElementById("recordsBody");
+                    tbody.innerHTML = "";
+                    if (data.status === "success" && data.records.length > 0) {
+                        data.records.forEach(record => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${record.date}</td>
+                                <td>${record.time}</td>
+                                <td>${record.treatment}</td>
+                                <td>${record.medication}</td>
+                                <td>${record.doctorName}</td>
+                                <td>${record.note}</td>
+                                <td>${record.hospitalName || ''}</td>
+                                <td><button class="request-report-btn">Request</button></td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No records found.</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    searchSpinner.style.display = "none";
+                    searchError.textContent = "Error fetching records: " + error.message;
+                });
+
+            // Fetch emergency details
+            fetch(`php/get_emergency_details.php?patientAadhar=${encodeURIComponent(patientAadhar)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const emergencyBody = document.getElementById("emergencyDetailsBody");
+                    emergencyBody.innerHTML = "";
+                    if (data.status === "success") {
+                        const details = data.details;
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${details.blood_group || ''}</td>
+                            <td>${details.emergency_contact_father_name || ''}</td>
+                            <td>${details.emergency_contact_father_phone || ''}</td>
+                            <td>${details.emergency_contact_mother_name || ''}</td>
+                            <td>${details.emergency_contact_mother_phone || ''}</td>
+                            <td>${details.chronic_conditions || ''}</td>
+                            <td>${details.allergies || ''}</td>
+                        `;
+                        emergencyBody.appendChild(tr);
+                    } else {
+                        emergencyBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No emergency details found.</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    const emergencyBody = document.getElementById("emergencyDetailsBody");
+                    emergencyBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Error fetching emergency details.</td></tr>';
+                    console.error("Error fetching emergency details:", error);
+                });
+        });
+
+        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        const abi = [
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "_patientAadhar",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "_treatment",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "_doctorName",
+                        "type": "string"
+                    }
+                ],
+                "name": "addRecord",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "_patientAadhar",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "index",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "getRecordByIndex",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "_patientAadhar",
+                        "type": "string"
+                    }
+                ],
+                "name": "getRecordCount",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        let provider;
+        let signer;
+        let contract;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                signer = provider.getSigner();
+                contract = new ethers.Contract(contractAddress, abi, signer);
+            } else {
+                alert("Please install MetaMask!");
+            }
+        }
+
+        connectWallet();
+
+document.getElementById("addRecordForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const aadhar = document.getElementById("patientAadhar").value.trim();
+            const treatment = document.getElementById("addTreatment").value.trim();
+            const doctor = document.getElementById("addDoctorName").value.trim();
+            const hospital = document.getElementById("addHospitalName").value.trim();
+            const date = document.getElementById("addDate").value.trim();
+            const time = document.getElementById("addTime").value.trim();
+            let note = document.getElementById("addNote").value.trim();
+            let medication = document.getElementById("addMedication").value.trim();
+
+            const addError = document.getElementById("addError");
+            const addSpinner = document.getElementById("addSpinner");
+            const addSuccess = document.getElementById("addSuccess");
+
+            addError.textContent = "";
+            addSuccess.textContent = "";
+            addSpinner.style.display = "inline-block";
+
+            if (!aadhar) {
+                addError.textContent = "Please enter patient Aadhar number in the search form before adding a record.";
+                addSpinner.style.display = "none";
+                return;
+            }
+            if (!treatment || !doctor || !hospital || !date || !time) {
+                addError.textContent = "Please fill in all required fields.";
+                addSpinner.style.display = "none";
+                return;
+            }
+
+try {
+                const tx = await contract.addRecord(aadhar, treatment, doctor);
+                await tx.wait();
+                addSpinner.style.display = "none";
+
+                const postData = {
+                    patientAadhar: aadhar,
+                    treatment: treatment,
+                    doctorName: doctor,
+                    hospitalName: hospital,
+                    date: date,
+                    time: time,
+                    note: note || "",
+                    medication: medication || ""
+                };
+
+                fetch('php/insert_record.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                })
+                .then(response => response.json())
+                .then(data => {
+if (data.status === 'success') {
+                        alert("Record added to blockchain! ✅");
+                        document.getElementById("addRecordModal").style.display = "none";
+                        fetch('php/log_record_addition.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                hospital_name: hospital,
+                                patient_aadhar: aadhar,
+                                blockchain_tx: tx.hash,
+                                status: 'success',
+                                source: 'hospital_UI',
+                                geo_location: null
+                            })
+                        }).catch(err => {
+                            console.error('Logging record addition failed:', err);
+                        });
+                    } else {
+                        addError.textContent = '❌ Database insert failed: ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    addError.textContent = '❌ Error inserting record into database: ' + error.message;
+                });
+
+            } catch (err) {
+                addSpinner.style.display = "none";
+                addError.textContent = "Transaction failed: " + err.message;
+                console.error("❌ Error:", err);
+            }
+        });
+
+        document.getElementById("showAddRecordBtn").addEventListener("click", function () {
+            document.getElementById("addRecordModal").style.display = "flex";
+        });
+
+        document.getElementById("closeAddRecordModal").addEventListener("click", function () {
+            document.getElementById("addRecordModal").style.display = "none";
+        });
+
+        window.addEventListener("click", function (event) {
+            const modal = document.getElementById("addRecordModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        function fetchDoctors(hospitalName) {
+            fetch('php/hospital_get_doctors.php?hospital=' + encodeURIComponent(hospitalName))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const doctorSelect = document.getElementById('addDoctorName');
+                        doctorSelect.innerHTML = '<option value="">Select Doctor</option>';
+                        data.doctors.forEach(doctor => {
+                            const option = document.createElement('option');
+                            option.value = doctor.name;
+                            option.textContent = doctor.name;
+                            doctorSelect.appendChild(option);
+                        });
+                    } else {
+                        console.error('Failed to load doctors:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching doctors:', error);
+                });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const hospitalName = localStorage.getItem('userName') || '';
+            const hospitalSelect = document.getElementById('addHospitalName');
+            hospitalSelect.innerHTML = '';
+            const option = document.createElement('option');
+            option.value = hospitalName;
+            option.textContent = hospitalName;
+            hospitalSelect.appendChild(option);
+            hospitalSelect.disabled = true;
+
+            fetchDoctors(hospitalName);
+        });
+    </script>
+</body>
+</html>

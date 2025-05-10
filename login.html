@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Healthcare Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #1abc9c;
+            --primary-dark: #16a085;
+            --secondary: #3498db;
+            --danger: #e74c3c;
+            --gradient-start: #2c3e50;
+            --gradient-end: #4ca1af;
+            --light: #ffffff;
+            --dark: #2c3e50;
+            --shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background Animation */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+PHJlY3Qgd2lkdGg9IjUiIGhlaWdodD0iNSIgeD0iMCIgeT0iMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        /* Floating Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.2;
+            z-index: -1;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        .blob-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--danger);
+            top: 60%;
+            left: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, -30px) rotate(5deg);
+            }
+            50% {
+                transform: translate(-30px, 40px) rotate(-5deg);
+            }
+            75% {
+                transform: translate(40px, 30px) rotate(5deg);
+            }
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            padding: 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            z-index: -1;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--light);
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .toggle-btn {
+            padding: 15px 25px;
+            font-size: 1rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            max-width: 160px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-btn i {
+            font-size: 1.2rem;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
+            transform: translateY(-3px);
+            border-color: transparent;
+        }
+
+        .toggle-btn:not(.active):hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        form {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        form.active {
+            display: block;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--light);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .submit-btn:hover::before {
+            opacity: 1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.4);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 30px 25px;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .toggle-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .toggle-btn {
+                max-width: 100%;
+                padding: 12px 20px;
+            }
+            
+            input {
+                padding: 12px 18px;
+            }
+            
+            .submit-btn {
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+                margin-bottom: 25px;
+            }
+            
+            .toggle-btn i {
+                font-size: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+        /* .font h1{
+            font-style: italic;
+        } */
+       
+
+
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div id="login" class="container">
+        <div class="login-card animate__animated animate__fadeIn">
+            <h1>AROGYA CHAIN</h1>
+            <h2><i class="fas fa-heartbeat" style="margin-right: 10px;"></i>Login</h2>
+            <div class="toggle-buttons">
+                <button id="patientBtn" class="toggle-btn ripple">
+                    <i class="fas fa-user-injured"></i> Patient
+                </button>
+                <button id="hospitalBtn" class="toggle-btn ripple">
+                    <i class="fas fa-hospital"></i> Hospital
+                </button>
+            </div>
+            <form id="patientLoginForm">
+                <div class="input-group">
+                    <input type="text" id="patientName" placeholder="Patient Name" />
+                </div>
+                <div class="input-group">
+                    <input type="text" id="patientAadhar" placeholder="Aadhar Number" />
+                </div>
+                <button type="submit" class="submit-btn ripple">
+                    <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign In
+                </button>
+                <div id="patient-error-message" class="error-message"></div>
+            </form>
+            <form id="hospitalLoginForm">
+                <div class="input-group">
+                    <input type="text" id="hospitalName" placeholder="Hospital Name" />
+                </div>
+                <div class="input-group">
+                    <input type="text" id="hospitalId" placeholder="Hospital ID" />
+                </div>
+                <button type="submit" class="submit-btn ripple">
+                    <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i> Sign In
+                </button>
+                <div id="hospital-error-message" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Ripple Effect
+        document.querySelectorAll('.ripple').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const x = e.clientX - e.target.getBoundingClientRect().left;
+                const y = e.clientY - e.target.getBoundingClientRect().top;
+                
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple-effect');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const patientBtn = document.getElementById("patientBtn");
+            const hospitalBtn = document.getElementById("hospitalBtn");
+
+            // Check URL hash to show appropriate form on page load
+            const hash = window.location.hash.substring(1);
+            if (hash === "patient") {
+                showPatientForm();
+            } else if (hash === "hospital") {
+                showHospitalForm();
+            }
+
+            function showPatientForm() {
+                patientBtn.classList.add("active");
+                hospitalBtn.classList.remove("active");
+                document.getElementById("patientLoginForm").style.display = "block";
+                document.getElementById("hospitalLoginForm").style.display = "none";
+            }
+
+            function showHospitalForm() {
+                hospitalBtn.classList.add("active");
+                patientBtn.classList.remove("active");
+                document.getElementById("patientLoginForm").style.display = "none";
+                document.getElementById("hospitalLoginForm").style.display = "block";
+            }
+
+            patientBtn.addEventListener("click", function () {
+                showPatientForm();
+                history.replaceState(null, null, "login.html#patient");
+            });
+
+            hospitalBtn.addEventListener("click", function () {
+                showHospitalForm();
+                history.replaceState(null, null, "login.html#hospital");
+            });
+
+            document.getElementById("patientLoginForm").addEventListener("submit", async function (event) {
+                event.preventDefault();
+                const errorMessage = document.getElementById("patient-error-message");
+                errorMessage.style.display = "none";
+
+                const patientName = document.getElementById("patientName").value.trim();
+                const patientAadhar = document.getElementById("patientAadhar").value.trim();
+
+                if (!patientName || !patientAadhar) {
+                    errorMessage.textContent = "Please fill in all fields.";
+                    errorMessage.style.display = "block";
+                    return;
+                }
+
+                try {
+                    const response = await fetch("php/login.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ userType: "patient", patientName, patientAadhar }),
+                    });
+                    const data = await response.json();
+
+                    if (data.status === "success") {
+                        localStorage.setItem("userRole", "patient");
+                        localStorage.setItem("userName", data.name);
+                        localStorage.setItem("patientAadhar", data.aadhar);
+                        window.location.href = "patient_dashboard.html";
+                    } else {
+                        errorMessage.textContent = "Login failed. Please check your credentials.";
+                        errorMessage.style.display = "block";
+                    }
+                } catch (error) {
+                    errorMessage.textContent = "An error occurred. Please try again later.";
+                    errorMessage.style.display = "block";
+                }
+            });
+
+            document.getElementById("hospitalLoginForm").addEventListener("submit", async function (event) {
+                event.preventDefault();
+                const errorMessage = document.getElementById("hospital-error-message");
+                errorMessage.style.display = "none";
+
+                const hospitalName = document.getElementById("hospitalName").value.trim();
+                const hospitalId = document.getElementById("hospitalId").value.trim();
+
+                if (!hospitalName || !hospitalId) {
+                    errorMessage.textContent = "Please fill in all fields.";
+                    errorMessage.style.display = "block";
+                    return;
+                }
+
+                try {
+                    const response = await fetch("php/login.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ userType: "hospital", hospitalName, hospitalId }),
+                    });
+                    const data = await response.json();
+
+                    if (data.status === "success") {
+                        localStorage.setItem("userRole", "hospital");
+                        localStorage.setItem("userName", data.name);
+                        window.location.href = "hospital_dashboard.html";
+                    } else {
+                        errorMessage.textContent = "Login failed. Please check your credentials.";
+                        errorMessage.style.display = "block";
+                    }
+                } catch (error) {
+                    errorMessage.textContent = "An error occurred. Please try again later.";
+                    errorMessage.style.display = "block";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patient Medical Record</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary-color: #00B894;
+            --secondary-color: #55efc4;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --gradient-start: #2c3e50;
+            --gradient-end: #4ca1af;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            margin: 0;
+            padding: 0;
+            color: var(--light-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            padding-bottom: 15px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            border-radius: 3px;
+        }
+        
+        .record {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .label {
+            font-weight: bold;
+            color: var(--secondary-color);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #00997b);
+            padding: 20px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            animation: slideInDown 0.8s ease-out;
+        }
+        
+        header h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Button Styles */
+        #logoutBtn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #logoutBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        #logoutBtn:active {
+            transform: translateY(0);
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: white;
+            margin-top: 20px;
+            animation: fadeIn 1s ease-out;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: rgba(0, 184, 148, 0.7);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(5px);
+            color: white;
+        }
+        
+        tr {
+            transition: all 0.3s ease;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        tr:hover {
+            background-color: rgba(0, 184, 148, 0.1);
+            transform: scale(1.01);
+        }
+        
+        /* Patient Info Styles */
+        .patient-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 184, 148, 0.1);
+            border-radius: 12px;
+            animation: fadeIn 0.8s ease-out;
+            border: 1px solid rgba(0, 184, 148, 0.2);
+        }
+        
+        .patient-info p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            flex: 1 1 200px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .patient-info {
+                flex-direction: column;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.85rem;
+            }
+            
+            #logoutBtn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .patient-info p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Floating Elements */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* No Records Message */
+        .no-records {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.7);
+            animation: fadeIn 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2 class="floating">Patient Medical Record</h2>
+        <button id="logoutBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+            </svg>
+            Logout
+        </button>
+    </header>
+    <div class="container">
+        <h1>My Medical Record</h1>
+        <div class="patient-info">
+            <p><span class="label">Aadhar Number:</span> <span id="aadharDisplay"></span></p>
+            <p><span class="label">Name:</span> <span id="nameDisplay"></span></p>
+        </div>
+        <div class="record" id="medicalRecord">
+            <table id="recordsTable">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Treatment</th>
+                    <th>Medication</th>
+                    <th>Doctor Name</th>
+                    <th>Note</th>
+                    <th>Hospital Name</th>
+                </tr>
+                </thead>
+                <tbody id="recordsBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userRole = localStorage.getItem("userRole");
+            if (userRole !== "patient") {
+                alert("Access denied. Please login as a patient.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const patientAadhar = localStorage.getItem("patientAadhar");
+            if (!patientAadhar) {
+                alert("No Aadhar number found. Please login again.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const userName = localStorage.getItem("userName");
+            const aadharDisplay = document.getElementById("aadharDisplay");
+            const nameDisplay = document.getElementById("nameDisplay");
+            aadharDisplay.textContent = patientAadhar;
+            nameDisplay.textContent = userName;
+
+            // Fetch medical records from backend API
+            fetch(`php/get_medical_records.php?patientAadhar=${encodeURIComponent(patientAadhar)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        const records = data.records;
+                        const tbody = document.getElementById("recordsBody");
+                        tbody.innerHTML = ""; // Clear existing rows
+                        if (records.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="7" class="no-records">No medical records found.</td></tr>`;
+                        } else {
+                            records.forEach(record => {
+                                const tr = document.createElement("tr");
+                                tr.innerHTML = `
+                                <td>${record.date}</td>
+                                <td>${record.time}</td>
+                                <td>${record.treatment}</td>
+                                <td>${record.medication}</td>
+                                <td>${record.doctorName}</td>
+                                <td>${record.note}</td>
+                                <td>${record.hospitalName || ''}</td>
+                                `;
+                                tbody.appendChild(tr);
+                            });
+                        }
+                    } else {
+                        alert("Failed to fetch medical records: " + (data.message || "Unknown error"));
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching medical records:", error);
+                    alert("Error fetching medical records: " + error.message);
+                });
+
+            document.getElementById("logoutBtn").addEventListener("click", function () {
+                console.log("Logout button clicked");
+                localStorage.removeItem("userRole");
+                localStorage.removeItem("userName");
+                localStorage.removeItem("patientAadhar");
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>

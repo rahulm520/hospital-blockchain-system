@@ -1,0 +1,15 @@
+Inside blockchain 
+run - npx hardhat clean
+
+then - npx hardhat compile
+
+then - npx hardhat node
+
+
+New terminal 
+then - npx hardhat run scripts/deploy.js --network localhost
+
+Added custom network:
+o Network name: Hardhat Localhost
+o RPC URL: http://127.0.0.1:8545
+o Chain ID: 31337

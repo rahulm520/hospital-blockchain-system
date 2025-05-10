@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Dashboard | HealthConnect Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #00b894;
+            --primary-light: #55efc4;
+            --primary-dark: #00a884;
+            --secondary: #0984e3;
+            --accent: #fd79a8;
+            --danger: #ff7675;
+            --warning: #fdcb6e;
+            --success: #00b894;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --gray: #636e72;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Dark Mode Variables */
+        .light-mode {
+            --primary: #00cec9;
+            --primary-dark: #00a8a5;
+            --dark: #1e272e;
+            --light: #2d3436;
+            --card-bg: rgba(30, 39, 46, 0.9);
+            --glass-bg: rgba(0, 0, 0, 0.2);
+            --glass-border: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.6s ease, color 0.3s ease;
+        }
+
+        .light-mode body {
+            background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);
+            color: #f5f6fa;
+        }
+
+        /* Floating Background Elements */
+        .bg-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+            z-index: -1;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--secondary);
+            bottom: 5%;
+            right: 5%;
+            animation-delay: 3s;
+        }
+
+        .circle-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 50%;
+            left: 30%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -30px) rotate(5deg); }
+            50% { transform: translate(-30px, 40px) rotate(-5deg); }
+            75% { transform: translate(40px, 30px) rotate(5deg); }
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: background 0.6s ease;
+        }
+
+        .light-mode header {
+            background: var(--dark);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            font-size: 2rem;
+            color: white;
+            transition: transform 0.4s ease;
+        }
+
+        .brand-logo:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .brand-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-profile:hover {
+            transform: translateX(5px);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.4s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        /* Logout Button */
+        #logoutBtn {
+            position: relative;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--danger), #ff6b00);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #logoutBtn i {
+            transition: all 0.5s ease;
+        }
+        
+        #logoutBtn:hover {
+            animation: shake 0.5s;
+            background: linear-gradient(45deg, var(--danger), var(--danger));
+            box-shadow: 0 0 20px var(--danger), 0 0 40px #ff4500;
+        }
+        
+        #logoutBtn:hover i {
+            transform: rotate(360deg) scale(1.5);
+        }
+        
+        #logoutBtn:active {
+            transform: scale(0.95);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        /* Theme Toggle Button */
+        .toggle-btn {
+            background: var(--dark);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            box-shadow: var(--card-shadow);
+        }
+
+        .light-mode .toggle-btn {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .toggle-btn:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Main Content */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            transition: all 0.6s ease;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: var(--card-shadow);
+            transition: all 0.6s ease;
+        }
+
+        .light-mode .welcome-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .welcome-greeting {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .welcome-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .welcome-message {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .welcome-illustration {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 300px;
+            opacity: 0.9;
+            transition: all 0.6s ease;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .stat-card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            transition: all 0.4s ease;
+        }
+
+        .stat-icon.primary {
+            background: var(--primary);
+        }
+
+        .stat-icon.secondary {
+            background: var(--secondary);
+        }
+
+        .stat-icon.accent {
+            background: var(--accent);
+        }
+
+        .stat-icon.danger {
+            background: var(--danger);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            opacity: 0.8;
+            transition: color 0.3s ease;
+        }
+
+        .light-mode .stat-label {
+            color: #b2bec3;
+        }
+
+        /* Quick Actions */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .section-title i {
+            color: var(--primary);
+            transition: color 0.3s ease;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            min-height: 250px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .action-card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-card:hover::before {
+            height: 10px;
+            background: var(--accent);
+        }
+
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .action-desc {
+            font-size: 0.9rem;
+            color: var(--gray);
+            opacity: 0.8;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+            max-width: 80%;
+        }
+
+        .light-mode .action-desc {
+            color: #b2bec3;
+        }
+
+        /* Special card styles */
+        .card-patient .action-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .card-doctor .action-icon {
+            background: linear-gradient(135deg, var(--warning), var(--danger));
+        }
+
+        .card-appointment .action-icon {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+        }
+
+        .card-settings .action-icon {
+            background: linear-gradient(135deg, var(--dark), var(--primary-dark));
+        }
+
+        /* Recent Activity */
+        .activity-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.6s ease;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .light-mode .activity-card {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .light-mode .activity-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 184, 148, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            color: var(--primary);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover .activity-icon {
+            background: var(--primary);
+            color: white;
+            transform: rotate(15deg);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+            opacity: 0.8;
+            transition: color 0.3s ease;
+        }
+
+        .light-mode .activity-time {
+            color: #b2bec3;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .welcome-illustration {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .welcome-section {
+                padding: 2rem;
+            }
+            
+            .welcome-name {
+                font-size: 2rem;
+            }
+            
+            .welcome-illustration {
+                width: 200px;
+                opacity: 0.5;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .welcome-section {
+                text-align: center;
+                padding: 2rem 1rem;
+            }
+            
+            .welcome-content {
+                max-width: 100%;
+            }
+            
+            .welcome-illustration {
+                display: none;
+            }
+            
+            .dashboard-container {
+                padding: 1rem;
+            }
+            
+            .user-name {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .welcome-name {
+                font-size: 1.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .brand-name {
+                font-size: 1.3rem;
+            }
+            
+            #logoutBtn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .toggle-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Elements -->
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <div class="brand-logo">
+                <i class="fas fa-hospital"></i>
+            </div>
+            <div class="brand-name">Hospital Dashboard</div>
+        </div>
+        
+        <div class="header-actions">
+            <button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="user-name" id="userNameDisplay">Admin</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleMode()"><i class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-content">
+                <div class="welcome-greeting">Hospital Management System</div>
+                <h1 class="welcome-name" id="welcomeMessage">Hospital Dashboard</h1>
+                <p class="welcome-message">
+                    Manage your hospital operations efficiently with real-time data and comprehensive tools for patient care, staff management, and medical records.
+                </p>
+            </div>
+            <img src="https://cdn-icons-png.flaticon.com/512/2039/2039178.png" alt="Healthcare" class="welcome-illustration" />
+        </section>
+
+        <!-- Stats Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fas fa-user-injured"></i>
+                </div>
+                <div class="stat-value">1,248</div>
+                <div class="stat-label">Active Patients</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon secondary">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="stat-value">87</div>
+                <div class="stat-label">Medical Staff</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon accent">
+                    <i class="fas fa-procedures"></i>
+                </div>
+                <div class="stat-value">156</div>
+                <div class="stat-label">Available Beds</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Critical Cases</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <h2 class="section-title">
+            <i class="fas fa-bolt"></i> Management Tools
+        </h2>
+        
+        <div class="actions-grid">
+            <div class="action-card ripple card-patient" onclick="window.location.href='hospital_patient_records.html'">
+                <div class="action-icon">
+                    <i class="fas fa-user-injured"></i>
+                </div>
+                <h3 class="action-title">Patient Records</h3>
+                <p class="action-desc">Access and manage complete patient medical histories and treatment plans</p>
+            </div>
+            
+            <div class="action-card ripple card-doctor" onclick="window.location.href='hospital_doctor_list.html'">
+                <div class="action-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3 class="action-title">Doctor List</h3>
+                <p class="action-desc">View and manage medical staff schedules, assignments and performance</p>
+            </div>
+            
+            <div class="action-card ripple card-appointment" onclick="window.location.href='hospital_manage_appointments.html'">
+                <div class="action-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="action-title">Appointments</h3>
+                <p class="action-desc">Schedule and manage patient appointments and consultations</p>
+            </div>
+            
+            <div class="action-card ripple card-settings" onclick="window.location.href='hospital_settings.html'">
+                <div class="action-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h3 class="action-title">Account Settings</h3>
+                <p class="action-desc">Configure hospital account parameters and user permissions</p>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <h2 class="section-title">
+            <i class="fas fa-history"></i> Recent Activity
+        </h2>
+        
+        <div class="activity-card">
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-procedures"></i>
+                </div>
+                <div class="activity-details">
+                    <h3 class="activity-title">New Admission - Room 204</h3>
+                    <div class="activity-time">15 minutes ago</div>
+                </div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                </div>
+                <div class="activity-details">
+                    <h3 class="activity-title">Medication Dispensed - Patient #4532</h3>
+                    <div class="activity-time">1 hour ago</div>
+                </div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="activity-details">
+                    <h3 class="activity-title">Dr. Smith Started Shift</h3>
+                    <div class="activity-time">2 hours ago</div>
+                </div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-ambulance"></i>
+                </div>
+                <div class="activity-details">
+                    <h3 class="activity-title">Emergency Case Arrived</h3>
+                    <div class="activity-time">3 hours ago</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ripple Effect
+        document.querySelectorAll('.ripple').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const x = e.clientX - e.target.getBoundingClientRect().left;
+                const y = e.clientY - e.target.getBoundingClientRect().top;
+                
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple-effect');
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const userName = localStorage.getItem("userName");
+            if (userName) {
+                document.getElementById("welcomeMessage").textContent = "Welcome " + userName;
+                document.getElementById("userNameDisplay").textContent = userName.split(' ')[0];
+                localStorage.setItem("hospitalName", userName);
+            }
+            document.getElementById("logoutBtn").addEventListener("click", function () {
+                localStorage.removeItem("userRole");
+                localStorage.removeItem("userName");
+                window.location.href = "login.html";
+            });
+        });
+
+        function toggleMode() {
+            document.body.classList.toggle("light-mode");
+            const icon = document.querySelector('.toggle-btn i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hospital - Doctor List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        :root {
+            --primary: #00b8a9;
+            --primary-dark: #00a895;
+            --secondary: #3d7afd;
+            --accent: #ff6b6b;
+            --success: #27ae60;
+            --dark: #222f3e;
+            --light: #f7f7f7;
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --neon-glow: 0 0 10px rgba(0, 184, 169, 0.7), 0 0 20px rgba(0, 184, 169, 0.5);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e2a3a, #2c3e50);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Floating Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Header with Neon Effect */
+        header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 20px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 0.8s;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent,
+                transparent,
+                transparent,
+                var(--primary),
+                transparent
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(10%, 10%); }
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Button Styles */
+        .btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Logout Button with Fire Effect */
+        #logoutBtn {
+            background: linear-gradient(45deg, var(--accent), #ff8e8e);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        #logoutBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+
+        #logoutBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff5252, #ff7676);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #logoutBtn:hover::before {
+            opacity: 1;
+        }
+
+        #logoutBtn::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(255, 107, 107, 0.8) 0%, transparent 70%);
+            filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #logoutBtn:hover::after {
+            opacity: 1;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        /* Add Doctor Button with Glow Effect */
+        #addDoctorBtn {
+            background: linear-gradient(45deg, var(--success), #2ecc71);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        #addDoctorBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.6);
+        }
+
+        #addDoctorBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #addDoctorBtn:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.7; height: 15px; }
+            100% { opacity: 1; height: 25px; }
+        }
+
+        /* Main Container with Glass Morphism */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s;
+        }
+
+        /* Search Input with Glow Effect */
+        #searchInput {
+            width: 100%;
+            padding: 15px 25px;
+            margin-bottom: 30px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: var(--neon-glow);
+            border: 1px solid var(--primary);
+        }
+
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Futuristic Table Design */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            color: white;
+            animation: fadeIn 1s;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        th:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        th::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            animation: shineHeader 3s infinite;
+        }
+
+        @keyframes shineHeader {
+            100% { transform: translateX(100%); }
+        }
+
+        td {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        td:first-child {
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        td:last-child {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        tr {
+            transition: all 0.3s ease;
+        }
+
+        tr:hover td {
+            background: rgba(0, 184, 169, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        tr:hover td:first-child {
+            border-left: 1px solid var(--primary);
+        }
+
+        tr:hover td:last-child {
+            border-right: 1px solid var(--primary);
+        }
+
+        /* Special Effects for Doctor Specialties */
+        td:nth-child(2) {
+            position: relative;
+        }
+
+        td:nth-child(2)::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 15px;
+            width: calc(100% - 30px);
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        tr:hover td:nth-child(2)::after {
+            transform: scaleX(1);
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            color: var(--accent);
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            animation: shakeX 0.5s;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+        }
+
+        /* No Doctors Message */
+        #doctorTableBody tr td[colspan] {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            animation: fadeIn 1s;
+        }
+
+        /* Modal Styles */
+        #addDoctorModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            position: relative;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .modal-content h3 {
+            color: var(--light);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            box-shadow: var(--neon-glow);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .modal-content input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #cancelAddDoctor {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        #cancelAddDoctor:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-actions button[type="submit"] {
+            background: var(--success);
+            color: white;
+        }
+
+        .modal-actions button[type="submit"]:hover {
+            background: #2ecc71;
+            transform: translateY(-2px);
+        }
+
+        #formErrorMessage {
+            color: var(--accent);
+            margin-top: 15px;
+            text-align: center;
+            animation: shakeX 0.5s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+                text-align: center;
+            }
+
+            .header-actions {
+                display: flex;
+                gap: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            #searchInput {
+                padding: 12px 20px;
+            }
+
+            .modal-content {
+                margin: 50px auto;
+                width: 90%;
+            }
+        }
+
+        /* Create Particles */
+    </style>
+</head>
+<body>
+    <header>
+        <h2><i class="fas fa-user-md"></i> Doctor Directory</h2>
+        <div class="header-actions">
+            <button id="addDoctorBtn" class="btn"><i class="fas fa-plus"></i> Add Doctor</button>
+            <button id="logoutBtn" class="btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </header>
+    <div class="container">
+        <input type="text" id="searchInput" placeholder="Search doctors by name or specialty..." />
+        <table>
+            <thead>
+                <tr>
+                    <th>Doctor Name</th>
+                    <th>Specialist</th>
+                    <th>Experience</th>
+                    <th>Contact</th>
+                    <th>Hospital</th>
+                </tr>
+            </thead>
+            <tbody id="doctorTableBody">
+                <tr><td colspan="5" style="text-align:center;">No doctors to display</td></tr>
+            </tbody>
+        </table>
+        <div id="errorMessage" class="error-message"></div>
+
+        <!-- Add Doctor Form Modal -->
+        <div id="addDoctorModal">
+            <div class="modal-content">
+                <h3>Add New Doctor</h3>
+                <form id="addDoctorForm">
+                    <input type="text" id="doctorName" placeholder="Doctor Name" required />
+                    <input type="text" id="doctorSpecialist" placeholder="Specialist" required />
+                    <input type="number" id="doctorExperience" placeholder="Experience (years)" min="0" required />
+                    <input type="text" id="doctorContact" placeholder="Contact" />
+                    <input type="text" id="doctorHospitalName" placeholder="Hospital Name" required readonly />
+                    <div class="modal-actions">
+                        <button type="button" id="cancelAddDoctor">Cancel</button>
+                        <button type="submit"><i class="fas fa-plus"></i> Add Doctor</button>
+                    </div>
+                </form>
+                <div id="formErrorMessage"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("logoutBtn").addEventListener("click", function () {
+            localStorage.clear();
+            window.location.href = "login.html";
+        });
+
+        const searchInput = document.getElementById("searchInput");
+        const doctorTableBody = document.getElementById("doctorTableBody");
+        const errorMessage = document.getElementById("errorMessage");
+
+        function fetchDoctors(query = "") {
+            errorMessage.textContent = "";
+            const hospitalName = localStorage.getItem("hospitalName") || "";
+            fetch(`php/hospital_get_doctors.php?search=${encodeURIComponent(query)}&hospitalName=${encodeURIComponent(hospitalName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    doctorTableBody.innerHTML = "";
+                    if (data.status === "success" && data.doctors.length > 0) {
+                        data.doctors.forEach(doctor => {
+                            const tr = document.createElement("tr");
+                            tr.className = "animate_animated animate_fadeIn";
+                            tr.innerHTML = `
+                                <td>${doctor.name}</td>
+                                <td>${doctor.specialist}</td>
+                                <td>${doctor.experience} yrs</td>
+                                <td>${doctor.contact || 'N/A'}</td>
+                                <td>${doctor.hospitalName || 'N/A'}</td>
+                            `;
+                            doctorTableBody.appendChild(tr);
+                        });
+                    } else {
+                        doctorTableBody.innerHTML = '<tr class="animate_animated animate_fadeIn"><td colspan="5" style="text-align:center;">No doctors found.</td></tr>';
+                    }
+                })
+                .catch(error => {
+                    errorMessage.textContent = "Error fetching doctors: " + error.message;
+                });
+        }
+
+        searchInput.addEventListener("input", () => {
+            fetchDoctors(searchInput.value.trim());
+        });
+
+        // Show/hide add doctor modal
+        const addDoctorBtn = document.getElementById("addDoctorBtn");
+        const addDoctorModal = document.getElementById("addDoctorModal");
+        const cancelAddDoctor = document.getElementById("cancelAddDoctor");
+        const addDoctorForm = document.getElementById("addDoctorForm");
+        const formErrorMessage = document.getElementById("formErrorMessage");
+
+        addDoctorBtn.addEventListener("click", () => {
+            formErrorMessage.textContent = "";
+            addDoctorForm.reset();
+            // Set hospital name from localStorage and make it readonly
+            const hospitalName = localStorage.getItem("hospitalName") || "";
+            const hospitalNameInput = document.getElementById("doctorHospitalName");
+            hospitalNameInput.value = hospitalName;
+            hospitalNameInput.readOnly = true;
+            addDoctorModal.style.display = "block";
+        });
+
+        cancelAddDoctor.addEventListener("click", () => {
+            addDoctorModal.style.display = "none";
+        });
+
+        addDoctorForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            formErrorMessage.textContent = "";
+
+            const name = document.getElementById("doctorName").value.trim();
+            const specialist = document.getElementById("doctorSpecialist").value.trim();
+            const experience = document.getElementById("doctorExperience").value.trim();
+            const contact = document.getElementById("doctorContact").value.trim();
+            const hospitalName = document.getElementById("doctorHospitalName").value.trim();
+
+            if (!name || !specialist || !experience || !hospitalName) {
+                formErrorMessage.textContent = "Please fill in all required fields.";
+                return;
+            }
+
+            // Send data to server to add doctor
+            fetch("php/hospital_add_doctor.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, specialist, experience, contact, hospitalName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    addDoctorModal.style.display = "none";
+                    fetchDoctors();
+                } else {
+                    formErrorMessage.textContent = data.message || "Failed to add doctor.";
+                }
+            })
+            .catch(error => {
+                formErrorMessage.textContent = "Error adding doctor: " + error.message;
+            });
+        });
+
+        // Initial fetch
+        fetchDoctors();
+
+        /* Create Particles */
+        function createParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'particles';
+            document.body.prepend(particlesContainer);
+
+            const particleCount = 50;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100 + 100; // Start below viewport
+                
+                // Random size
+                const size = Math.random() * 3 + 2;
+                
+                // Random animation duration
+                const duration = Math.random() * 10 + 10;
+                
+                // Random delay
+                const delay = Math.random() * 5;
+                
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Call the function when DOM is loaded
+        document.addEventListener('DOMContentLoaded', createParticles);
+    </script>
+</body>
+</html>
